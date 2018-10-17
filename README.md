@@ -38,3 +38,5 @@ For macOS using [Homebrew](https://brew.sh/), the following packages should be i
 * boost
 
 To perform the build, simply run the `build.sh` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-tools.tar.gz` package will contain the tools.
+
+> **Note:** If you want to keep a script around for custom arguments without checking it into source control, create a script named `build-wrapper.sh`. This is in `.gitignore` so it won't show as a locally modified file.

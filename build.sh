@@ -1,4 +1,5 @@
-#!/bin/sh -e
+#!/usr/bin/env bash
+set -e
 
 # Perform build in this directory.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -22,8 +23,12 @@ OUTPUT="$DIR/$OUTPUT"
 pushd "$DIR/install" > /dev/null
 
 BIN_FILES=$( ls bin/* )
-LIB_FILES=$( ls lib/*.so )
-tar -czf "$OUTPUT" $BIN_FILES $LIB_FILES
+if ls lib/*.so 2>&1 > /dev/null; then
+	LIB_FILES=$( ls lib/*.so )
+else
+	LIB_FILES=
+fi
+tar czf "$OUTPUT" $BIN_FILES $LIB_FILES
 
 popd > /dev/null
 

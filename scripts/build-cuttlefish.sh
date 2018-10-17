@@ -1,9 +1,11 @@
-#!/bin/sh -e
+#!/usr/bin/env bash
+set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 VERSION="$( cat "$DIR/cuttlefish.version" )"
 PROCESSORS="$( $DIR/processors.sh )"
 CHECKOUT=Cuttlefish
+echo $DIR
 
 rm -rf $CHECKOUT
 git clone https://github.com/akb825/$CHECKOUT.git
