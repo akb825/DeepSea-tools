@@ -2,6 +2,6 @@ Cuttlefish
 ModularShaderLanguage
 install
 DeepSea-tools.*
-build-wrapper.sh
-build-wrapper.bat
+build-custom.sh
+build-custom.bat
 *.swp
