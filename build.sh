@@ -22,9 +22,15 @@ echo "Creating package \"$OUTPUT\"..."
 OUTPUT="$DIR/$OUTPUT"
 pushd "$DIR/install" > /dev/null
 
+if [ "$(uname)" = "Darwin" ]; then
+	LIB_EXT="dylib"
+else
+	LIB_EXT="so"
+fi
+
 BIN_FILES=$( ls bin/* )
-if ls lib/*.so 2>&1 > /dev/null; then
-	LIB_FILES=$( ls lib/*.so )
+if ls lib/*.$LIB_EXT 2>&1 > /dev/null; then
+	LIB_FILES=$( ls lib/*.$LIB_EXT )
 else
 	LIB_FILES=
 fi

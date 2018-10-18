@@ -34,9 +34,37 @@ For example, on Ubuntu the following packages should be installed:
 * libboost-all-dev
 
 For macOS using [Homebrew](https://brew.sh/), the following packages should be installed:
+
 * cmake
 * boost
 
 To perform the build, simply run the `build.sh` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-tools.tar.gz` package will contain the tools.
 
 > **Note:** If you want to keep a script around for custom arguments without checking it into source control, create a script named `build-custom.sh`. This is in `.gitignore` so it won't show as a locally modified file.
+
+# Example custom build scripts
+
+Custom build scripts can be used to control the version of the compiler used. For example, to use a newer compiler or support older systems.
+
+## Linux
+
+On Linux, it's recommended to build on as old of a system as possible (such as within a virtual machine) to support older versions of `glibc`. However, if you want to use the PVRTexTool library to have PVR texture support, you will need GCC 4.9 or higher.
+
+For example, if you use Ubuntu 14.04 to compile the tools, you can use the [test toolchain PPA](https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test) to obtain GCC 4.9. From there, you can use the following `build-custom.sh` script:
+
+	#!/bin/sh
+	set -e
+	./build.sh -DCMAKE_CXX_COMPILER=g++-4.9
+
+## macOS
+
+In order to support earlier than the current version of macOS (such as back in the ye olde days when it was still called Mac OS X), you need to download an older version of XCode. You can download rather old versions of XCode from Apple's developer website, though it's quite limited how far back will actually run on a modern system. When running macOS 10.14, the furthest back I could go is XCode 7.3.1. This would allow building against the Mac OS X 10.11 SDK.
+
+In order to use an older version of XCode, download it, rename `XCode.app` to a different name (e.g. `XCode-7.3.1.app`), and move it to `/Applicatons`. You should also run it in order to make sure the command line tools are installed.
+
+Once an older version is installed, a `build-custom.sh` such as the following can be used:
+
+	#!/bin/sh
+	set -e
+	export DEVELOPER_DIR=/Applications/Xcode-7.3.1.app/Contents/Developer
+	./build.sh
