@@ -54,7 +54,7 @@ For example, if you use Ubuntu 14.04 to compile the tools, you can use the [test
 
 	#!/bin/sh
 	set -e
-	./build.sh -DCMAKE_CXX_COMPILER=g++-4.9
+	./build.sh -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9
 
 ## macOS
 
