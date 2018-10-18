@@ -67,4 +67,4 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 	#!/bin/sh
 	set -e
 	export DEVELOPER_DIR=/Applications/Xcode-7.3.1.app/Contents/Developer
-	./build.sh
+	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
