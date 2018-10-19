@@ -18,6 +18,7 @@ The following software is required to build DeepSea-tools:
 * [cmake](https://cmake.org/) 3.1 or later. This must be in your `PATH`.
 * [boost](http://www.boost.org/) This should be in the standard install location so it can be found with CMake.
 * [PVRTexTools](https://community.imgtec.com/developers/powervr/tools/pvrtextool/) Optional for PVR support in Cuttlefish. This should be installed in the standard location.
+* [7zip](https://www.7-zip.org/) is required on Windows.
 
 # Compiling
 
@@ -41,6 +42,12 @@ For macOS using [Homebrew](https://brew.sh/), the following packages should be i
 To perform the build, simply run the `build.sh` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-tools.tar.gz` package will contain the tools.
 
 > **Note:** If you want to keep a script around for custom arguments without checking it into source control, create a script named `build-custom.sh`. This is in `.gitignore` so it won't show as a locally modified file.
+
+## Windows
+
+The default setup for Windows is to build with Visual Studio 2017 using the v140 toolset. (i.e. Visual Studio 2015 toolset, but from the Visual Studio 2017 installer) It's assumed that [Git for Windows](https://git-scm.com/) is installed in `C:\\Program Files\\Git`, which is the default if you install for the same architecture as your Windows install. (i.e. use the 64-bit installer when using 64-bit Windows)
+
+If Boost is installed such that it's visible from CMake (typically by putting the library folder on `PATH`), the `build.bat` script can be used directly. Otherwise a custom `build-custom.bat` script can be used to specify the path with the `BOOST_LIBRARYDIR` CMake variable. Note that the 32-bit tools are built by default, so the 32-bit version of Boost should be used unless it's overridden.
 
 # Example custom build scripts
 
@@ -68,3 +75,10 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 	set -e
 	export DEVELOPER_DIR=/Applications/Xcode-7.3.1.app/Contents/Developer
 	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
+	
+## Windows
+
+Windows is configured to create the 32-bit build by default. If your system is set up to find the 64-bit boost by default, you may need to have build `build-custom.bat` file to set the path for the 32-bit libraries. An example is:
+
+	@echo off
+	.\build.bat "-DBOOST_LIBRARYDIR=C:\local\boost_1_68_0\lib32-msvc-14.0"
