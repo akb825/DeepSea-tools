@@ -10,11 +10,13 @@ mkdir install
 
 INSTALL_ARGS=-DCMAKE_INSTALL_PREFIX="$DIR/install"
 
-echo "Building Cuttlefish..."
-scripts/build-cuttlefish.sh "$INSTALL_ARGS" $@
-
-echo "Building ModularShaderLanguage..."
-scripts/build-msl.sh "$INSTALL_ARGS" $@
+REPOS=("Cuttlefish" "ModularShaderLanguage")
+for REPO in "${REPOS[@]}"
+do
+	echo "Building $REPO..."
+	scripts/checkout.sh "$REPO"
+	scripts/compile.sh "$REPO" "$INSTALL_ARGS" $@
+done
 
 OUTPUT="DeepSea-tools.tar.gz"
 echo "Creating package \"$OUTPUT\"..."
@@ -39,6 +41,10 @@ tar czf "$OUTPUT" $BIN_FILES $LIB_FILES
 popd > /dev/null
 
 echo "Cleaning up..."
-rm -rf Cuttlefish ModularShaderLanguage install
+for REPO in "${REPOS[@]}"
+do
+	rm -rf "$REPO"
+done
+rm -rf install
 
 echo "Done"
