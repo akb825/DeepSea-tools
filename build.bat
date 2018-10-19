@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 set PREV_DIR=%cd%
 set DIR=%~dp0
 cd "%DIR%"
@@ -13,7 +14,15 @@ set REPOS="Cuttlefish" "ModularShaderLanguage"
 for %%R in (%REPOS%) do (
 	echo "Building %%R..."
 	%GIT_BASH% -c "scripts/checkout.sh %%R"
+	if !ERRORLEVEL! neq 0 (
+		cd %PREV_DIR%
+		exit /B !ERRORLEVEL!
+	)
 	call scripts\compile.bat %%R %INSTALL_ARGS% %*
+	if !ERRORLEVEL! neq 0 (
+		cd %PREV_DIR%
+		exit /B !ERRORLEVEL!
+	)
 )
 
 REM Variables are shared between scripts, so need to get DIR agian.

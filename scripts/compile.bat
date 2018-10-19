@@ -21,7 +21,10 @@ if "%~1" neq "" (
 )
 
 cmake .. -G "Visual Studio 15 2017" -Tv140 %FLAGS% %ARGS%
+if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 cmake --build . --config Release
+if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 cmake --build . --config Release --target install
+if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 
 cd %PREV_DIR%
