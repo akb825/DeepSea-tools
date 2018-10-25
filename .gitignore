@@ -1,7 +1,7 @@
 Cuttlefish
 ModularShaderLanguage
 install
-DeepSea-tools.*
-build-custom.sh
-build-custom.bat
+DeepSea-tools*.*
+build-custom*.sh
+build-custom*.bat
 *.swp

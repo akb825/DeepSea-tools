@@ -61,7 +61,7 @@ For example, if you use Ubuntu 14.04 to compile the tools, you can use the [test
 
 	#!/bin/sh
 	set -e
-	./build.sh -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9
+	./build.sh -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 -o DeepSea-tools-linux.tar.gz
 
 ## macOS
 
@@ -74,7 +74,7 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 	#!/bin/sh
 	set -e
 	export DEVELOPER_DIR=/Applications/Xcode-7.3.1.app/Contents/Developer
-	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
+	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -o DeepSea-tools-mac.tar.gz
 	
 ## Windows
 
