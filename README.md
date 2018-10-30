@@ -81,4 +81,7 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 Windows is configured to create the 32-bit build by default. If your system is set up to find the 64-bit boost by default, you may need to have build `build-custom.bat` file to set the path for the 32-bit libraries. An example is:
 
 	@echo off
-	.\build.bat "-DBOOST_LIBRARYDIR=C:\local\boost_1_68_0\lib32-msvc-14.0"
+	.\build.bat "-DBOOST_LIBRARYDIR^=C:\local\boost_1_68_0\lib32-msvc-14.0" -o DeepSea-tools-win32.zip
+
+> **Note:** Both the quotes surrounding the -DBOOST_LIBRARYDIR argument and the '^' escape character for '=' are required for the command line arguments to be properly forwarded.
+	
