@@ -49,6 +49,8 @@ The default setup for Windows is to build with Visual Studio 2017 using the v140
 
 If Boost is installed such that it's visible from CMake (typically by putting the library folder on `PATH`), the `build.bat` script can be used directly. Otherwise a custom `build-custom.bat` script can be used to specify the path with the `BOOST_LIBRARYDIR` CMake variable. Note that the 32-bit tools are built by default, so the 32-bit version of Boost should be used unless it's overridden.
 
+> **Note:** Boost provides [prebuilt Windows binaries](https://sourceforge.net/projects/boost/files/boost-binaries/) that can be installed. However, you may find that the download never finishes after reaching 100%, and even if you manage to get the download completed, any file operations on the installer simply don't work. This is because Windows Defender attempts to inspect the package, which contains hundreds of thousands of files, and I haven't been patient enough to measure just how long it will take. (but it's likely on the order of hours) If you choose to install these packages, you will most likely need to disable Windows Defender live protection temporarily, though keep in mind there is some risk in doing so if you don't trust the packages.
+
 # Example custom build scripts
 
 Custom build scripts can be used to control the version of the compiler used. For example, to use a newer compiler or support older systems.
@@ -84,4 +86,4 @@ Windows is configured to create the 32-bit build by default. If your system is s
 	.\build.bat "-DBOOST_LIBRARYDIR^=C:\local\boost_1_68_0\lib32-msvc-14.0" -o DeepSea-tools-win32.zip
 
 > **Note:** Both the quotes surrounding the -DBOOST_LIBRARYDIR argument and the '^' escape character for '=' are required for the command line arguments to be properly forwarded.
-	
+
