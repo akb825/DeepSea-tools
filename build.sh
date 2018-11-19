@@ -6,12 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CWD="$( pwd )"
 cd "$DIR"
 
-rm -rf install
-mkdir install
-
-rm -rf build
-mkdir build
-
 INSTALL_ARGS=-DCMAKE_INSTALL_PREFIX="$DIR/install"
 OUTPUT="$DIR/DeepSea-tools.tar.gz"
 
@@ -44,6 +38,12 @@ do
 	esac
 	shift
 done
+
+rm -rf install
+mkdir install
+
+rm -rf build
+mkdir build
 
 pushd "$DIR/build" > /dev/null
 

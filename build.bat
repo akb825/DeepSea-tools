@@ -4,12 +4,6 @@ set PREV_DIR=%cd%
 set DIR=%~dp0
 cd "%DIR%"
 
-rmdir install /S /Q > nul 2>&1
-mkdir install
-
-rmdir build /S /Q > nul 2>&1
-mkdir build
-
 set INSTALL_ARGS="-DCMAKE_INSTALL_PREFIX=%DIR%install"
 set CMAKE_ARGS=
 set OUTPUT="%DIR%DeepSea-tools.zip"
@@ -34,6 +28,12 @@ if not "%1"=="" (
 	shift /1
 	goto :parseArgs
 )
+
+rmdir install /S /Q > nul 2>&1
+mkdir install
+
+rmdir build /S /Q > nul 2>&1
+mkdir build
 
 set GIT_BASH="C:\Program Files\Git\bin\bash.exe"
 set REPOS=Cuttlefish ModularShaderLanguage
