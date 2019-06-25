@@ -9,7 +9,7 @@ rmdir build /S /Q > nul 2>&1
 mkdir build
 cd build
 
-cmake .. -G "Visual Studio 15 2017" -Tv140 %FLAGS% %*
+cmake .. -Tv140 %FLAGS% %*
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 cmake --build . --config Release
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
