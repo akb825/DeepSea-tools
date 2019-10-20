@@ -1,0 +1,51 @@
+trigger:
+  - master
+variables:
+  - group: Common
+jobs:
+  - job: Linux
+    pool:
+        vmImage: ubuntu-16.04
+    workspace:
+        clean: all
+    steps:
+      - script: sudo apt-get -y install libboost-all-dev
+        displayName: Download dependencies
+      - script: $(Build.SourcesDirectory)/build.sh -DBOOST_ROOT=/usr -o DeepSea-tools-linux.tar.gz
+        workingDirectory: $(Build.BinariesDirectory)
+        displayName: Build
+      - publish: $(Build.BinariesDirectory)/DeepSea-tools-linux.tar.gz
+        artifact: Linux
+        displayName: Publish
+  - job: Mac
+    pool:
+        vmImage: macOS-10.13
+    workspace:
+        clean: all
+    steps:
+      - script: brew install boost
+        displayName: Download dependencies
+      - script: |
+            export DEVELOPER_DIR=/Applications/Xcode_8.3.3.app/Contents/Developer
+            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
+                -o DeepSea-tools-mac.tar.gz
+        workingDirectory: $(Build.BinariesDirectory)
+        displayName: Build
+      - publish: $(Build.BinariesDirectory)/DeepSea-tools-mac.tar.gz
+        artifact: Mac
+        displayName: Publish
+  - job: Windows
+    pool:
+        vmImage: vs2017-win2016
+    workspace:
+        clean: all
+    steps:
+      - script: $(Build.SourcesDirectory)\build.bat -A Win32 -o DeepSea-tools-win32.zip
+        workingDirectory: $(Build.BinariesDirectory)
+        displayName: Build
+      - publish: $(Build.BinariesDirectory)\DeepSea-tools-win32.zip
+        artifact: Windows
+        displayName: Publish
+
+# vim: ts=4 sts=4 sw=4 et

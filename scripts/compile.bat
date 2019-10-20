@@ -9,7 +9,7 @@ rmdir build /S /Q > nul 2>&1
 mkdir build
 cd build
 
-cmake .. -Tv140 %FLAGS% %*
+cmake .. %FLAGS% %*
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 cmake --build . --config Release
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
