@@ -20,6 +20,8 @@ The following software is required to build DeepSea-tools:
 * [PVRTexTools](https://community.imgtec.com/developers/powervr/tools/pvrtextool/) Optional for PVR support in Cuttlefish. This should be installed in the standard location.
 * [7zip](https://www.7-zip.org/) is required on Windows.
 
+[![Build Status](https://dev.azure.com/akb825/DeepSea/_apis/build/status/akb825.DeepSea-tools?branchName=master)](https://dev.azure.com/akb825/DeepSea/_build/latest?definitionId=3&branchName=master)
+
 # Compiling
 
 Scripts are provided to perform the compilation on various platforms.
