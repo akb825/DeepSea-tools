@@ -9,7 +9,9 @@ jobs:
     workspace:
         clean: all
     steps:
-      - script: sudo apt-get -y install libboost-all-dev
+      - script: |
+            sudo apt-get update
+            sudo apt-get -y install libboost-all-dev
         displayName: Download dependencies
       - script: $(Build.SourcesDirectory)/build.sh -DBOOST_ROOT=/usr -o DeepSea-tools-linux.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
