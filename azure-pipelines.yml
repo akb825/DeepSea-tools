@@ -21,15 +21,15 @@ jobs:
         displayName: Publish
   - job: Mac
     pool:
-        vmImage: macOS-10.13
+        vmImage: macOS-10.14
     workspace:
         clean: all
     steps:
       - script: brew install boost
         displayName: Download dependencies
       - script: |
-            export DEVELOPER_DIR=/Applications/Xcode_8.3.3.app/Contents/Developer
-            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+            export DEVELOPER_DIR=/Applications/Xcode_9.4.1.app/Contents/Developer
+            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
             $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
                 -o DeepSea-tools-mac.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
