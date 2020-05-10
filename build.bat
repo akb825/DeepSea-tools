@@ -36,7 +36,7 @@ rmdir build /S /Q > nul 2>&1
 mkdir build
 
 set GIT_BASH="C:\Program Files\Git\bin\bash.exe"
-set REPOS=Cuttlefish ModularShaderLanguage
+set REPOS=Cuttlefish ModularShaderLanguage VertexFormatConvert
 cd build
 for %%R in (%REPOS%) do (
 	echo Building %%R...

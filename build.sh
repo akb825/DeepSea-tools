@@ -47,7 +47,7 @@ mkdir build
 
 pushd "$DIR/build" > /dev/null
 
-REPOS=("Cuttlefish" "ModularShaderLanguage")
+REPOS=("Cuttlefish" "ModularShaderLanguage" "VertexFormatConvert")
 for REPO in "${REPOS[@]}"
 do
 	echo "Building $REPO..."

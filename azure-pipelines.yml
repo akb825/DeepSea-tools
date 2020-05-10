@@ -46,6 +46,8 @@ jobs:
       - script: $(Build.SourcesDirectory)\build.bat -A Win32 -o DeepSea-tools-win32.zip
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
+        env:
+            BOOST_ROOT: $(BOOST_ROOT_1_72_0)
       - publish: $(Build.BinariesDirectory)\DeepSea-tools-win32.zip
         artifact: Windows
         displayName: Publish
