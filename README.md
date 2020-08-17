@@ -16,8 +16,8 @@ This builds the following tools:
 The following software is required to build DeepSea-tools:
 
 * [cmake](https://cmake.org/) 3.1 or later. This must be in your `PATH`.
-* [boost](http://www.boost.org/) This should be in the standard install location so it can be found with CMake.
-* [PVRTexTools](https://community.imgtec.com/developers/powervr/tools/pvrtextool/) Optional for PVR support in Cuttlefish. This should be installed in the standard location.
+* [Python](https://www.python.org/) 3 or later. This must be in your `PATH`.
+* [boost](https://www.boost.org/) This should be in the standard install location so it can be found with CMake.
 * [7zip](https://www.7-zip.org/) is required on Windows.
 
 [![Build Status](https://dev.azure.com/akb825/DeepSea/_apis/build/status/akb825.DeepSea-tools?branchName=master)](https://dev.azure.com/akb825/DeepSea/_build/latest?definitionId=3&branchName=master)
