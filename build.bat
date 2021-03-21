@@ -23,7 +23,7 @@ if not "%1"=="" (
 			set OUTPUT=%2
 			shift /1
 			if not "!OUTPUT:~2,1!"==":" set OUTPUT="%PREV_DIR%\!OUTPUT!"
-		) else set CMAKE_ARGS=!CMAKE_ARGS! "%1"
+		) else set CMAKE_ARGS=!CMAKE_ARGS! "%~1"
 	)
 	shift /1
 	goto :parseArgs
