@@ -32,15 +32,15 @@ jobs:
         displayName: Publish
   - job: Mac
     pool:
-        vmImage: macOS-10.14
+        vmImage: macOS-1015
     workspace:
         clean: all
     steps:
       - script: brew install boost ispc
         displayName: Download dependencies
       - script: |
-            export DEVELOPER_DIR=/Applications/Xcode_9.4.1.app/Contents/Developer
-            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
+            export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer
+            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
             $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
                 -o DeepSea-tools-mac.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
@@ -50,7 +50,7 @@ jobs:
         displayName: Publish
   - job: Windows
     pool:
-        vmImage: vs2017-win2016
+        vmImage: windows-2019
     workspace:
         clean: all
     steps:
