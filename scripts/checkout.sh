@@ -9,9 +9,4 @@ rm -rf "$REPO"
 git clone "https://github.com/akb825/$REPO.git"
 cd "$REPO"
 git checkout "v$VERSION"
-if [ -e update-submodules.sh ]; then
-	./update-submodules.sh
-else
-	git submodule init
-	git submodule update
-fi
+git submodule update --init --recursive
