@@ -2,9 +2,9 @@ trigger:
   - master
 variables:
   - name: ispc.version
-    value: 1.15.0
+    value: 1.16.1
   - name: msvc.version
-    value: 14.1
+    value: 14.0
   - name: win.boostDir
     value: C:\hostedtoolcache\windows\Boost
   - group: Common
@@ -32,37 +32,30 @@ jobs:
         displayName: Publish
   - job: Mac_x86_64
     pool:
-        vmImage: macOS-1015
+        vmImage: macOS-latest
     workspace:
         clean: all
     steps:
       - script: brew install boost ispc
         displayName: Download dependencies
       - script: |
-            export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer
-            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
-            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
-                -o DeepSea-tools-mac.tar.gz
+            $(Build.SourcesDirectory)/build.sh -o DeepSea-tools-mac.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
       - publish: $(Build.BinariesDirectory)/DeepSea-tools-mac.tar.gz
         artifact: Mac-x86-64
         displayName: Publish
-# Disable macOS arm64 build since ISPC through homebrew only has support for the native arch.
-# Having arm64 support is of limited usefulness as it doesn't have PVRTC support.
 #  - job: Mac_arm64
 #    pool:
-#        vmImage: macOS-11
+#        vmImage: macOS-latest
 #    workspace:
 #        clean: all
 #    steps:
 #      - script: brew install boost ispc
 #        displayName: Download dependencies
 #      - script: |
-#            export DEVELOPER_DIR=/Applications/Xcode_13.0.app/Contents/Developer
-#            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk
-#            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
-#                -DCMAKE_OSX_ARCHITECTURES=arm64 -o DeepSea-tools-mac-arm64.tar.gz
+#            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_ARCHITECTURES=arm64 \
+#                -o DeepSea-tools-mac-arm64.tar.gz
 #        workingDirectory: $(Build.BinariesDirectory)
 #        displayName: Build
 #      - publish: $(Build.BinariesDirectory)/DeepSea-tools-mac-arm64.tar.gz
@@ -70,7 +63,7 @@ jobs:
 #        displayName: Publish
   - job: Windows
     pool:
-        vmImage: windows-2019
+        vmImage: windows-latest
     workspace:
         clean: all
     steps:
@@ -86,7 +79,7 @@ jobs:
             Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$(win.boostDir)"
         displayName: Download boost
       - script: |
-            $(Build.SourcesDirectory)\build.bat -A Win32 "-DBOOST_ROOT^=$(win.boostDir)" ^
+            $(Build.SourcesDirectory)\build.bat -A Win32 -T v140 "-DBOOST_ROOT^=$(win.boostDir)" ^
                 "-DCUTTLEFISH_ISPC_PATH^=$(Build.SourcesDirectory)/ispc-v$(ispc.version)-windows/bin/ispc.exe" ^
                 -o DeepSea-tools-win32.zip
         workingDirectory: $(Build.BinariesDirectory)
