@@ -63,7 +63,7 @@ jobs:
 #        displayName: Publish
   - job: Windows
     pool:
-        vmImage: windows-2019
+        vmImage: windows-latest
     workspace:
         clean: all
     steps:
@@ -79,7 +79,7 @@ jobs:
             Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$(win.boostDir)"
         displayName: Download boost
       - script: |
-            $(Build.SourcesDirectory)\build.bat -A Win32 -T v140 "-DBOOST_ROOT^=$(win.boostDir)" ^
+            $(Build.SourcesDirectory)\build.bat -A Win32 -T v141 "-DBOOST_ROOT^=$(win.boostDir)" ^
                 "-DCUTTLEFISH_ISPC_PATH^=$(Build.SourcesDirectory)/ispc-v$(ispc.version)-windows/bin/ispc.exe" ^
                 -o DeepSea-tools-win32.zip
         workingDirectory: $(Build.BinariesDirectory)
