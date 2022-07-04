@@ -3,13 +3,8 @@
 DeepSea-tools provides scripts to build the tool dependencies for compiling [DeepSea](https://github.com/akb825/DeepSea). Pre-compiled releases are provided for the following platforms:
 
 * Linux for x86-64 (glibc 2.27 or later, e.g. Ubuntu 18.04)
-* macOS for x86-64 (10.13 or later)
+* macOS for x86-64/arm64 (10.14 or later)
 * Windows for x86
-
-> **Note:** macOS binaries for arm64 aren't currently built. There are two limitations for this:
->
-> 1. arm64 VMs aren't currently available through Azure DevOps, meaning that dependencies like boost would need to be built from scratch.
-> 2. PVRTexTool library doesn't provide arm64 binaries for arm64, meaning PVRTC can't be supported.
 
 This builds the following tools:
 

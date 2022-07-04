@@ -1,10 +1,8 @@
 trigger:
   - master
 variables:
-  - name: ispc.version
-    value: 1.16.1
   - name: msvc.version
-    value: 14.0
+    value: 14.1
   - name: win.boostDir
     value: C:\hostedtoolcache\windows\Boost
   - group: Common
@@ -30,37 +28,55 @@ jobs:
       - publish: $(Build.BinariesDirectory)/DeepSea-tools-linux.tar.gz
         artifact: Linux
         displayName: Publish
-  - job: Mac_x86_64
+  - job: Mac
     pool:
         vmImage: macOS-latest
     workspace:
         clean: all
     steps:
-      - script: brew install boost ispc
-        displayName: Download dependencies
       - script: |
-            $(Build.SourcesDirectory)/build.sh -o DeepSea-tools-mac.tar.gz
+            curl -L https://github.com/ispc/ispc/releases/download/v$(ispc.version)/ispc-v$(ispc.version)-macOS.tar.gz -o ispc.tar.gz
+            tar xzf ispc.tar.gz
+        displayName: Download ISPC
+        workingDirectory: $(Build.SourcesDirectory)
+      - script: |
+            git clone https://github.com/boostorg/boost.git -b boost-$(boost.version)
+            cd boost
+            git submodule update --init
+        displayName: Download boost
+        workingDirectory: $(Build.SourcesDirectory)
+      - task: CMake@1
+        inputs:
+            workingDirectory: $(Build.BinariesDirectory)/boost-build
+            cmakeArgs: >-
+                -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+                -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14
+                -DCMAKE_INSTALL_PREFIX=$(Build.BinariesDirectory)/boost
+                -DBOOST_EXCLUDE_LIBRARIES="context;coroutine;fiber;asio;log"
+                $(Build.SourcesDirectory)/boost
+        displayName: Run CMake boost
+      - task: CMake@1
+        inputs:
+            workingDirectory: $(Build.BinariesDirectory)/boost-build
+            cmakeArgs: --build . -j $(cores.count)
+        displayName: Build boost
+      - task: CMake@1
+        inputs:
+            workingDirectory: $(Build.BinariesDirectory)/boost-build
+            cmakeArgs: --build . --target install
+        displayName: Install boost
+      - script: |
+            $(Build.SourcesDirectory)/build.sh -GXcode \
+                -DCUTTLEFISH_ISPC_PATH="$(Build.SourcesDirectory)/ispc-v$(ispc.version)-macOS/bin/ispc" \
+                -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+                -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+                -DCMAKE_PREFIX_PATH="$(Build.BinariesDirectory)/boost" \
+                -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -o DeepSea-tools-mac.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
       - publish: $(Build.BinariesDirectory)/DeepSea-tools-mac.tar.gz
-        artifact: Mac-x86-64
+        artifact: Mac
         displayName: Publish
-#  - job: Mac_arm64
-#    pool:
-#        vmImage: macOS-latest
-#    workspace:
-#        clean: all
-#    steps:
-#      - script: brew install boost ispc
-#        displayName: Download dependencies
-#      - script: |
-#            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_ARCHITECTURES=arm64 \
-#                -o DeepSea-tools-mac-arm64.tar.gz
-#        workingDirectory: $(Build.BinariesDirectory)
-#        displayName: Build
-#      - publish: $(Build.BinariesDirectory)/DeepSea-tools-mac-arm64.tar.gz
-#        artifact: Mac-arm64
-#        displayName: Publish
   - job: Windows
     pool:
         vmImage: windows-latest

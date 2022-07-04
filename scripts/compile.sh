@@ -13,6 +13,6 @@ rm -rf build
 mkdir build
 cd build
 
-cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release $FLAGS $@
-make -j$PROCESSORS
-make install
+cmake .. -DCMAKE_BUILD_TYPE=Release $FLAGS $@
+cmake --build . --config Release -j$PROCESSORS
+cmake --build . --config Release --target install
