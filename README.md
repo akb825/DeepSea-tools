@@ -2,7 +2,7 @@
 
 DeepSea-tools provides scripts to build the tool dependencies for compiling [DeepSea](https://github.com/akb825/DeepSea). Pre-compiled releases are provided for the following platforms:
 
-* Linux for x86-64 (glibc 2.27 or later, e.g. Ubuntu 18.04)
+* Linux for x86-64 (glibc 2.31 or later, e.g. Ubuntu 20.04)
 * macOS for x86-64/arm64 (10.14 or later)
 * Windows for x86
 
