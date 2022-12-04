@@ -1,5 +1,7 @@
 # Introduction
 
+[![DeepSea-tools](https://github.com/akb825/DeepSea-tools/actions/workflows/main.yml/badge.svg)](https://github.com/akb825/DeepSea-tools/actions/workflows/main.yml)
+
 DeepSea-tools provides scripts to build the tool dependencies for compiling [DeepSea](https://github.com/akb825/DeepSea). Pre-compiled releases are provided for the following platforms:
 
 * Linux for x86-64 (glibc 2.31 or later, e.g. Ubuntu 20.04)
@@ -20,8 +22,6 @@ The following software is required to build DeepSea-tools:
 * [Python](https://www.python.org/) 3 or later. This must be in your `PATH`.
 * [boost](https://www.boost.org/) This should be in the standard install location so it can be found with CMake.
 * [7zip](https://www.7-zip.org/) is required on Windows.
-
-[![Build Status](https://dev.azure.com/akb825/DeepSea/_apis/build/status/akb825.DeepSea-tools?branchName=master)](https://dev.azure.com/akb825/DeepSea/_build/latest?definitionId=3&branchName=master)
 
 # Compiling
 

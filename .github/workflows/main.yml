@@ -1,0 +1,110 @@
+name: DeepSea-tools
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+env:
+  boost_version: 1.80.0
+  ispc_version: 1.18.0
+  msvc_version: 14.1
+jobs:
+  Linux:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Download dependencies
+      run: |-
+        sudo apt-get update
+        sudo apt-get -y install libboost-all-dev
+        curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-linux.tar.gz -o ispc.tar.gz
+        tar xzf ispc.tar.gz
+    - name: Build
+      run: |-
+        ./build.sh \
+          -DCUTTLEFISH_ISPC_PATH=${{ github.workspace }}/ispc-v${{ env.ispc_version }}-linux/bin/ispc \
+          -o DeepSea-tools-linux.tar.gz
+      working-directory: "${{ github.workspace }}"
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: Linux
+        path: "${{ github.workspace }}/DeepSea-tools-linux.tar.gz"
+  Mac:
+    runs-on: macos-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Download ISPC
+      run: |-
+        curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-macOS.tar.gz -o ispc.tar.gz
+        tar xzf ispc.tar.gz
+      working-directory: "${{ github.workspace }}"
+    - name: Download boost
+      run: |-
+        git clone https://github.com/boostorg/boost.git -b boost-${{ env.boost_version }}
+        cd boost
+        git submodule update --init
+      working-directory: "${{ github.workspace }}"
+    - name: Build boost
+      run: |-
+        mkdir -p boost/build
+        cd boost/build
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/boost/build/install \
+          -DBOOST_EXCLUDE_LIBRARIES="context;coroutine;fiber;asio;log" ..
+        cmake --build . -j ${{ env.cores_mac_count }}
+        cmake --build . --target install
+    - name: Build
+      run: |-
+        ${{ github.workspace }}/build.sh -GXcode \
+          -DCUTTLEFISH_ISPC_PATH="${{ github.workspace }}/ispc-v${{ env.ispc_version }}-macOS/bin/ispc" \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/boost/build/install" \
+          -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -o DeepSea-tools-mac.tar.gz
+      working-directory: "${{ github.workspace }}"
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: Mac
+        path: "${{ github.workspace }}/DeepSea-tools-mac.tar.gz"
+  Windows:
+    runs-on: windows-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Download ISPC
+      run: |-
+        curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-windows.zip -o ispc.zip
+        unzip ispc.zip
+      shell: bash
+      working-directory: "${{ github.workspace }}"
+    - name: Download boost
+      uses: nick-fields/retry@v2
+      with:
+        timeout_minutes: 10
+        max_attempts: 5
+        command: |-
+          $underscoreVersion = "${{ env.boost_version }}".replace(".", "_")
+          $url = "https://sourceforge.net/projects/boost/files/boost-binaries/${{ env.boost_version }}/boost_$underscoreVersion-msvc-${{ env.msvc_version }}-32.exe"
+          (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP\boost.exe")
+          Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=D:\boost"
+    - name: Build
+      run: |-
+        .\build.bat -A Win32 -T v141 "-DBOOST_ROOT^=D:/boost" ^
+          "-DCUTTLEFISH_ISPC_PATH^=${{ github.workspace }}/ispc-v${{ env.ispc_version }}-windows/bin/ispc.exe" ^
+          -o DeepSea-tools-win32.zip
+      shell: cmd
+      working-directory: "${{ github.workspace }}"
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows
+        path: "${{ github.workspace }}\\DeepSea-tools-win32.zip"
+
+# vim: ts=2 sts=2 sw=2 et
