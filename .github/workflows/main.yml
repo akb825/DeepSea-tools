@@ -7,9 +7,10 @@ on:
     branches:
     - master
 env:
-  boost_version: 1.80.0
+  boost_version: 1.83.0
   ispc_version: 1.18.0
-  msvc_version: 14.1
+  msvc_version: 14.2
+  msvc_toolset: 142
 jobs:
   Linux:
     runs-on: ubuntu-20.04
@@ -96,7 +97,7 @@ jobs:
           Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=D:\boost"
     - name: Build
       run: |-
-        .\build.bat -A Win32 -T v141 "-DBOOST_ROOT^=D:/boost" ^
+        .\build.bat -A Win32 -T v${{ env.msvc_toolset }} "-DBOOST_ROOT^=D:/boost" ^
           "-DCUTTLEFISH_ISPC_PATH^=${{ github.workspace }}/ispc-v${{ env.ispc_version }}-windows/bin/ispc.exe" ^
           -o DeepSea-tools-win32.zip
       shell: cmd
