@@ -7,16 +7,17 @@ on:
     branches:
     - master
 env:
-  boost_version: 1.83.0
-  ispc_version: 1.18.0
+  boost_version: 1.84.0
+  ispc_version: 1.23.0
   msvc_version: 14.2
   msvc_toolset: 142
+  macos_version: 10.15
 jobs:
   Linux:
     runs-on: ubuntu-20.04
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download dependencies
       run: |-
         sudo apt-get update
@@ -30,7 +31,7 @@ jobs:
           -o DeepSea-tools-linux.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Linux
         path: "${{ github.workspace }}/DeepSea-tools-linux.tar.gz"
@@ -38,10 +39,10 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download ISPC
       run: |-
-        curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-macOS.tar.gz -o ispc.tar.gz
+        curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-macOS.universal.tar.gz -o ispc.tar.gz
         tar xzf ispc.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Download boost
@@ -55,7 +56,7 @@ jobs:
         mkdir -p boost/build
         cd boost/build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=${{ env.macos_version }} \
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/boost/build/install \
           -DBOOST_EXCLUDE_LIBRARIES="context;coroutine;fiber;asio;log" ..
         cmake --build . -j ${{ env.cores_mac_count }}
@@ -63,14 +64,14 @@ jobs:
     - name: Build
       run: |-
         ${{ github.workspace }}/build.sh -GXcode \
-          -DCUTTLEFISH_ISPC_PATH="${{ github.workspace }}/ispc-v${{ env.ispc_version }}-macOS/bin/ispc" \
+          -DCUTTLEFISH_ISPC_PATH="${{ github.workspace }}/ispc-v${{ env.ispc_version }}-macOS.universal/bin/ispc" \
           -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=${{ env.macos_version }} \
           -DCMAKE_PREFIX_PATH="${{ github.workspace }}/boost/build/install" \
           -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -o DeepSea-tools-mac.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Mac
         path: "${{ github.workspace }}/DeepSea-tools-mac.tar.gz"
@@ -78,7 +79,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download ISPC
       run: |-
         curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-windows.zip -o ispc.zip
@@ -103,7 +104,7 @@ jobs:
       shell: cmd
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Windows
         path: "${{ github.workspace }}\\DeepSea-tools-win32.zip"
