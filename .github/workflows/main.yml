@@ -12,6 +12,8 @@ env:
   msvc_version: 14.2
   msvc_toolset: 142
   macos_version: 10.15
+  cores_count: 4
+  cores_mac_count: 3
 jobs:
   Linux:
     runs-on: ubuntu-20.04
@@ -58,7 +60,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=${{ env.macos_version }} \
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/boost/build/install \
-          -DBOOST_EXCLUDE_LIBRARIES="context;coroutine;fiber;asio;log" ..
+          -DBOOST_EXCLUDE_LIBRARIES="context;coroutine;fiber;asio;cobalt;log" ..
         cmake --build . -j ${{ env.cores_mac_count }}
         cmake --build . --target install
     - name: Build
@@ -87,7 +89,7 @@ jobs:
       shell: bash
       working-directory: "${{ github.workspace }}"
     - name: Download boost
-      uses: nick-fields/retry@v2
+      uses: nick-fields/retry@v3
       with:
         timeout_minutes: 10
         max_attempts: 5
