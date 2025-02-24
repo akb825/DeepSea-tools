@@ -16,7 +16,7 @@ env:
   cores_mac_count: 3
 jobs:
   Linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: checkout
       uses: actions/checkout@v4

@@ -3,4 +3,5 @@ install
 DeepSea-tools*.*
 build-custom*.sh
 build-custom*.bat
+.DS_Store
 *.swp
