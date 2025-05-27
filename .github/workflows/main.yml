@@ -7,8 +7,8 @@ on:
     branches:
     - master
 env:
-  boost_version: 1.86.0
-  ispc_version: 1.25.3
+  boost_version: 1.88.0
+  ispc_version: 1.27.0
   msvc_version: 14.2
   msvc_toolset: 142
   macos_version: 10.15
