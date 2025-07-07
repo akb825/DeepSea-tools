@@ -78,7 +78,7 @@ jobs:
         name: Mac
         path: "${{ github.workspace }}/DeepSea-tools-mac.tar.gz"
   Windows:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
     - name: checkout
       uses: actions/checkout@v4
