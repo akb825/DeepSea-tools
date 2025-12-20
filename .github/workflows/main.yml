@@ -7,8 +7,8 @@ on:
     branches:
     - master
 env:
-  boost_version: 1.88.0
-  ispc_version: 1.27.0
+  boost_version: 1.90.0
+  ispc_version: 1.29.1
   msvc_version: 14.2
   msvc_toolset: 142
   macos_version: 10.15
@@ -95,7 +95,7 @@ jobs:
         max_attempts: 5
         command: |-
           $underscoreVersion = "${{ env.boost_version }}".replace(".", "_")
-          $url = "https://versaweb.dl.sourceforge.net/project/boost/boost-binaries/${{ env.boost_version }}/boost_$underscoreVersion-msvc-${{ env.msvc_version }}-32.exe"
+          $url = "https://psychz.dl.sourceforge.net/project/boost/boost-binaries/${{ env.boost_version }}/boost_$underscoreVersion-msvc-${{ env.msvc_version }}-32.exe"
           (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP\boost.exe")
           Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=D:\boost"
     - name: Build
