@@ -7,8 +7,8 @@ on:
     branches:
     - master
 env:
-  boost_version: 1.90.0
-  ispc_version: 1.29.1
+  boost_version: 1.91.0
+  ispc_version: 1.30.0
   msvc_version: 14.2
   msvc_toolset: 142
   macos_version: 10.15
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Download dependencies
       run: |-
         sudo apt-get update
@@ -33,7 +33,7 @@ jobs:
           -o DeepSea-tools-linux.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: Linux
         path: "${{ github.workspace }}/DeepSea-tools-linux.tar.gz"
@@ -41,7 +41,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Download ISPC
       run: |-
         curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-macOS.universal.tar.gz -o ispc.tar.gz
@@ -73,7 +73,7 @@ jobs:
           -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -o DeepSea-tools-mac.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: Mac
         path: "${{ github.workspace }}/DeepSea-tools-mac.tar.gz"
@@ -81,7 +81,7 @@ jobs:
     runs-on: windows-2025
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Download ISPC
       run: |-
         curl -L https://github.com/ispc/ispc/releases/download/v${{ env.ispc_version }}/ispc-v${{ env.ispc_version }}-windows.zip -o ispc.zip
@@ -89,7 +89,7 @@ jobs:
       shell: bash
       working-directory: "${{ github.workspace }}"
     - name: Download boost
-      uses: nick-fields/retry@v3
+      uses: nick-fields/retry@v4
       with:
         timeout_minutes: 10
         max_attempts: 5
@@ -106,7 +106,7 @@ jobs:
       shell: cmd
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: Windows
         path: "${{ github.workspace }}\\DeepSea-tools-win32.zip"
